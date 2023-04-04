@@ -19,8 +19,8 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post()
-  @UseGuards(AuthGuard())
-  @ApiBearerAuth()
+  // @UseGuards(AuthGuard())
+  // @ApiBearerAuth()
   @ApiOperation({ summary: 'Criar um usuário:' })
   async createUser(@Body() createUserDto: CreateUserDto): Promise<PrismaUser> {
     return this.usersService.createUser(createUserDto);

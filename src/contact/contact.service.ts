@@ -113,14 +113,16 @@ export class ContactsService {
   async getNextContact(
     userId: string,
     currentContactId: string,
-  ): Promise<Contact | null> {
+  ): Promise<{ contact: Contact | null; message: string }> {
     const currentContact = await this.prisma.contact.findUnique({
       where: { id: currentContactId },
     });
 
-    if (!currentContact) return null;
+    if (!currentContact) {
+      return { contact: null, message: 'Current contact not found.' };
+    }
 
-    return this.prisma.contact.findFirst({
+    const nextContact = await this.prisma.contact.findFirst({
       where: {
         userId,
         createdAt: {
@@ -131,17 +133,25 @@ export class ContactsService {
         createdAt: 'asc',
       },
     });
+
+    if (!nextContact) {
+      return { contact: null, message: 'No next contact found.' };
+    }
+
+    return { contact: nextContact, message: 'Next contact found.' };
   }
 
   async skipToNextLetter(
     userId: string,
     currentContactId: string,
-  ): Promise<Contact | null> {
+  ): Promise<{ contact: Contact | null; message: string }> {
     const currentContact = await this.prisma.contact.findUnique({
       where: { id: currentContactId },
     });
 
-    if (!currentContact) return null;
+    if (!currentContact) {
+      return { contact: null, message: 'Current contact not found.' };
+    }
 
     const firstLetter = currentContact.name[0];
     const nextLetterContacts = await this.prisma.contact.findMany({
@@ -160,6 +170,17 @@ export class ContactsService {
       (contact) => contact.id === currentContactId,
     );
     const nextContact = nextLetterContacts[currentIndex + 1] || null;
-    return nextContact;
+
+    if (!nextContact) {
+      return {
+        contact: null,
+        message: 'No contact with the next letter found.',
+      };
+    }
+
+    return {
+      contact: nextContact,
+      message: 'Contact with the next letter found.',
+    };
   }
 }

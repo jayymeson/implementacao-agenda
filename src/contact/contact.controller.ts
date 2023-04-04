@@ -104,7 +104,7 @@ export class ContactsController {
   async getNextContact(
     @Query('userId') userId: string,
     @Param('currentContactId') currentContactId: string,
-  ): Promise<Contact | null> {
+  ): Promise<{ contact: Contact | null; message: string }> {
     return this.contactsService.getNextContact(userId, currentContactId);
   }
 
@@ -115,7 +115,7 @@ export class ContactsController {
   async skipToNextLetter(
     @Query('userId') userId: string,
     @Param('currentContactId') currentContactId: string,
-  ): Promise<Contact | null> {
-    return this.contactsService.skipToNextLetter(userId, currentContactId);
+  ): Promise<{ contact: Contact | null; message: string }> {
+    return this.contactsService.getNextContact(userId, currentContactId);
   }
 }
