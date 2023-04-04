@@ -13,11 +13,11 @@ import {
 import { ContactsService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { Contact } from './entities/contact.entity';
-import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { LoggedUser } from 'src/auth/logged-user.decorators';
 import { User } from '@prisma/client';
-
+@ApiTags('contact')
 @Controller('contacts')
 export class ContactsController {
   constructor(private contactsService: ContactsService) {}
